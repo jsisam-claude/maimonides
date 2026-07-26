@@ -121,6 +121,35 @@ def main(path: str = FILE, shots: str = SHOT) -> int:
         check("the photographed ר״ל passage is printed", bool(rl),
               "החיבורים ההם found in the letter commentary")
 
+        # The commentary and its chapter must run together. Kaspi comments
+        # lemma by lemma in the chapter's own order, so the sequence of link
+        # anchors in the Guide, taken as the commentary utters them, should be
+        # nearly sorted — measured as longest-increasing-subsequence over all
+        # units with two or more links. Backward links exist and are lawful
+        # (Kaspi glances over his shoulder; a repeated formula with OCR damage
+        # can anchor long at the wrong occurrence), which is why the floor is
+        # a median and not a per-unit demand. Median measured at 0.89.
+        sync = pg.evaluate("""(()=>{
+          const lis=a=>{const t=[];for(const x of a){let l=0,r=t.length;
+            while(l<r){const m=(l+r)>>1; if(t[m]<x)l=m+1; else r=m}
+            t[l]=x} return t.length};
+          const scores=[];
+          for(const k of D.order){const u=D.units[k]||{};
+            const ord=h=>{const s=new Set(),o=[];
+              for(const m of (h||'').matchAll(/data-q="(\\d+)"/g)){
+                const q=+m[1]; if(!s.has(q)){s.add(q);o.push(q)}} return o};
+            const G=ord(u.g), C=ord((u.a||'')+(u.m||''));
+            if(C.length<2) continue;
+            const r=new Map(G.map((q,i)=>[q,i]));
+            const seq=C.filter(q=>r.has(q)).map(q=>r.get(q));
+            if(seq.length>=2) scores.push(lis(seq)/seq.length)}
+          scores.sort((a,b)=>a-b);
+          return {n:scores.length, med:scores[Math.floor(scores.length/2)]};
+        })()""")
+        check("commentary follows its chapter's order",
+              sync["n"] > 100 and sync["med"] >= 0.8,
+              f"median LIS {sync['med']:.2f} over {sync['n']} units")
+
         # the binding: hovering a lemma must light its twin in the Guide
         pg.hover("#kaspi .q")
         pg.wait_for_timeout(120)

@@ -82,28 +82,43 @@ def quotations(comment: str, base: str) -> tuple[list[tuple[int, int]],
     for i in range(len(b) - SEED + 1):
         seeds[b[i:i + SEED]].append(i)
 
+    # Kaspi reads the chapter forward, so where a quotation could sit at more
+    # than one place in the base — the Guide repeats its own formulae, and a
+    # chapter on the intellects says ‏השכל הפועל‎ a dozen times — equal
+    # evidence goes to the first occurrence at or past the previous lemma,
+    # not to the first occurrence in the chapter. Length still rules: a
+    # longer match elsewhere is evidence of place, and a genuinely backward
+    # quotation (``כמו שקדם``) stays backward. Measured over the volume,
+    # anchoring ties by reading order rather than by chapter order is the
+    # difference between a two-way highlight that follows the commentary and
+    # one that keeps jumping the reader to a formula's first appearance.
     cspans, bspans = [], []
-    i = 0
+    i, prev = 0, 0
     while i <= len(c) - SEED:
         hits = seeds.get(c[i:i + SEED])
         if not hits:
             i += 1
             continue
-        best = (0, 0, 0)                       # length, cstart, bstart
-        for p in hits[:64]:                    # cap: a stock phrase can recur
+        best = (0, 1, 0, 0)              # length, behind-prev?, cstart, bstart
+        for p in hits[:64]:              # cap: a stock phrase can recur
             lo = 0
             while (i - lo > 0 and p - lo > 0 and c[i - lo - 1] == b[p - lo - 1]):
                 lo += 1
             hi = SEED
             while (i + hi < len(c) and p + hi < len(b) and c[i + hi] == b[p + hi]):
                 hi += 1
-            if lo + hi > best[0]:
-                best = (lo + hi, i - lo, p - lo)
-        n, cs, bs = best
+            cand = (lo + hi, 0 if p - lo >= prev else 1, i - lo, p - lo)
+            if (cand[0], -cand[1]) > (best[0], -best[1]):
+                best = cand
+        n, _, cs, bs = best
         if n >= MINLEN:
             cspans.append((ci[cs], ci[cs + n - 1] + 1))
             bspans.append((bi[bs], bi[bs + n - 1] + 1))
             i = cs + n
+            # The reading position only advances: a backward quotation is a
+            # glance over the shoulder, not a return of the whole commentary
+            # to the top of the chapter.
+            prev = max(prev, bs + n)
         else:
             i += 1
     return cspans, bspans

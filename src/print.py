@@ -82,11 +82,15 @@ section.unit{margin:0 0 7mm}
 .unit h2{font-size:16pt;margin:7mm 0 1mm;page-break-after:avoid}
 .unit .cite{text-align:center;font-size:9.5pt;color:#555;margin:0 0 3mm;
             page-break-after:avoid}
-.guide{font-family:'Hadasim CLM',serif;font-size:14.5pt;line-height:1.8;
+/* div.guide, never bare .guide: the edition uses class="guide" for the
+   collation mark too (the ת siglum, an underlined word inside a lemma), and
+   an unscoped selector once dressed four hundred marked words in the
+   commentary as 14.5pt Maimonides — they read as pasted photographs. */
+div.guide{font-family:'Hadasim CLM',serif;font-size:14.5pt;line-height:1.8;
        margin:0 7mm 3.5mm}
-.guide p{margin:0 0 2mm;text-indent:5mm}
-.guide p:first-child{text-indent:0}
-.guide p:last-child{text-align-last:center}
+div.guide p{margin:0 0 2mm;text-indent:5mm}
+div.guide p:first-child{text-indent:0}
+div.guide p:last-child{text-align-last:center}
 .comm{column-count:2;column-gap:8mm;column-fill:balance}
 .work h3{font-size:12pt;margin:2.5mm 0 1.2mm;column-span:all}
 .work:first-child h3{margin-top:0}
@@ -95,7 +99,7 @@ section.unit{margin:0 0 7mm}
 
 /* lemma quotations: bold in the commentary, as the tradition sets them */
 .work .q{font-weight:700}
-.guide .q{font-weight:inherit}
+div.guide .q{font-weight:inherit}
 sup.fn{font-size:7pt;line-height:0}
 
 /* the marks, as in the edition: thin underlines, each kind its own line */

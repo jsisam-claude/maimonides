@@ -46,9 +46,19 @@ def grams(s: str, n: int = N) -> set[str]:
 
 
 def chapters(corpus_path: str):
+    """Every Guide section a unit could be a commentary on.
+
+    The front matter — letter, introduction, part prefaces — is in the pool
+    with the chapters. It was once left out on the argument that only chapters
+    are template-matched, and that is exactly how a unit made of introduction
+    commentary got to wear the verdict "disagree, argmax I:73" instead of the
+    verdict that would have named the mistake: its best match was a section
+    the verifier was never shown.
+    """
     moreh = json.load(open(corpus_path, encoding="utf-8"))["moreh"]
-    keys = sorted((k for k in moreh if k.startswith("ch:")),
-                  key=lambda k: (int(k.split(":")[1]), int(k.split(":")[2])))
+    keys = sorted(moreh,
+                  key=lambda k: (int(k.split(":")[1]), int(k.split(":")[2]),
+                                 k.split(":")[0]))
     return [(k, grams(norm(" ".join(moreh[k])))) for k in keys]
 
 
@@ -76,6 +86,8 @@ def run(units_path: str, corpus_path: str, out_path: str) -> dict:
 
     rows, agree, top3, scored = [], 0, 0, 0
     for u in res["units"]:
+        if u["unit"] not in index:                # Kaspi's own preface: no
+            continue                              # Guide text to check against
         text = norm(u["amudei"] + " " + u["maskiyot"])
         if len(text) < 300:                       # too short to vote on
             rows.append({"unit": u["unit"], "verdict": "short",

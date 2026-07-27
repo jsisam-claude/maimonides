@@ -24,6 +24,14 @@ import os
 import sys
 
 PARTS = {"1": "חלק ראשון", "2": "חלק שני", "3": "חלק שלישי"}
+PART_LEN = {"1": 76, "2": 48, "3": 54}
+
+# The formula the edition itself prints for a chapter the 1848 volume does
+# not comment on. Absence must be stated, not implied by a numbering gap:
+# Kaspi withheld the Merkabah chapters (III:2–6 run straight from פרק א to
+# פרק ז on the page), and a reader of the study pack who meets a silent gap
+# cannot tell a source lacuna from a packaging hole.
+ABSENT = "אין פירוש בדפוס פרנקפורט תר״ח."
 
 # The front sections, in reading order: Sefaria-package key → Hebrew head +
 # citation siglum.
@@ -74,8 +82,14 @@ def emit(src: str, dst: str, sig: str, work_he: str) -> tuple[int, list]:
         out.append("")
         if intro and intro[0] in fm:
             block(intro[1], intro[2], None, fm[intro[0]])
-        for c, paras in (chs or {}).items():
-            block("פרק %s" % c, "%s:%s" % (p, c), None, paras)
+        for c in map(str, range(1, PART_LEN[p] + 1)):
+            if c in (chs or {}):
+                block("פרק %s" % c, "%s:%s" % (p, c), None, chs[c])
+            else:
+                out.append("## פרק %s  [%s %s:%s] — %s"
+                           % (c, sig, p, c, ABSENT))
+                out.append("")
+                toc.append(("%s:%s" % (p, c), "פרק %s — אין פירוש" % c, 0))
 
     open(dst, "w", encoding="utf-8").write("\n".join(out))
     return len("\n".join(out)), toc
@@ -93,6 +107,23 @@ def main() -> None:
                          (f"{base}/out/sefaria/maskiyot_kesef.json", "MK", "משכיות כסף")):
         name = f"{dst}/{sig.lower()}_{'amudei' if sig=='AK' else 'maskiyot'}_kesef.md"
         n, toc = emit(src, name, sig, he)
+        if sig == "AK":
+            # Werbluner's addenda — matter he found only in MS Munich at the
+            # end of Amudei Kesef — belong in the study text, not only in the
+            # library package: analysis that stops at the printed run misses
+            # Kaspi's own closing pieces.
+            add = json.load(open(f"{base}/out/sefaria/addenda_munich.json",
+                                 encoding="utf-8"))
+            with open(name, "a", encoding="utf-8") as f:
+                f.write("\n# הוספות המגיה מכ״י מינכן\n\n")
+                for i, b in enumerate(add["blocks"], 1):
+                    head = b["label"] or "הוספות מכ״י מינכן"
+                    f.write("## %s  [AK add:%d · דף %s]\n\n"
+                            % (head, i, b.get("printed_page") or "?"))
+                    for t in b["text"]:
+                        f.write(t + "\n\n")
+                    toc.append(("add:%d" % i, head,
+                                len(" ".join(b["text"]))))
         index.append("## %s" % he)
         index.append("")
         for ref, head, chars in toc:

@@ -81,10 +81,28 @@ reading position, not the chapter's first occurrence of a repeated formula.
 | 34513 (partial, 31 pp.) | עשרה כלי כסף II — front + start of Lamentations | **מנורת כסף NOT inside**; need pp. 75–142 of the full volume |
 | 34555 (28 pp., complete) | פירוש הסודות לראב״ע (Oxford MSS) | queued for ingestion |
 | 34190 (26 pp., complete) | נקרות כסף (letters and glosses on Kaspi) | queued |
-| 26882 (382 pp.) | **אדני כסף** — Prophets, ed. Last (Oxford MS) | queued; note: partially printed also in מקראות גדולות הכתר |
+| 26882 (383 pp.) | **אדני כסף I** — Former Prophets + Isaiah, ed. Last (Oxford MS); its preface announces vol. II as separate | queued |
 | 9458 (184 pp.) | **משנה כסף I — טירת כסף** (Last 1905) | queued |
 | 9459 (338 pp.) | **משנה כסף II — מצרף לכסף** (Last 1906) | queued; Rock's dissertation supersedes it for Genesis |
+| 33605 / 33606 | **חצוצרות כסף** — the two Proverbs commentaries (Paris & Munich MSS) | queued |
+| 33604 | שיר השירים (Constantinople 1577 text) + קהלת (two Oxford MSS) | queued |
+| 33578 | **חגורת כסף** — Ezra, Nehemiah, Chronicles (Oxford MS) | queued |
+| 35224 | **שלחן כסף** — Job (Munich Cod. 265) | queued |
+| 39632 | **תם הכסף** — the eight discourses (Last, London 1913) | queued |
 | Rock 2007 dissertation (360 pp.) | study + critical מצרף לכסף/Genesis | **private research only — in copyright** |
+
+**Still missing, obtainable (public domain, printed):**
+
+1. **מנורת כסף** — עשרה כלי כסף II, pp. 75–142 (full HebrewBooks 34513) — *the original quest*.
+2. **אדני כסף II** — Jeremiah, Ezekiel, the Twelve (Last, London 1912; a separate HebrewBooks item).
+3. עשרה כלי כסף I body: the two Job commentaries (pp. 133–179, distinct from שלחן כסף) and ספר המוסר (pp. 59–74).
+4. עשרה כלי כסף II body: Esther (pp. 29–40) and the complete Ruth + Lamentations (pp. 1–28; the front-slice caught only part).
+
+**Not obtainable as public domain** (manuscripts or modern editions only —
+private-research route): גביע כסף (Herring 1982), צרור הכסף (Vatican 283;
+the ההטעאה section in Rosenberg 1984), פרשת כסף (Vatican 151),
+שרשות/רתוקות כסף. קבוצת כסף, Kaspi's own works-catalog, is already in hand
+inside the vol. I front matter.
 
 **Key scholarly finding from Dr. A. Rock's dissertation (Bar-Ilan 2007):**
 her census fixes מנורת כסף's address (עשרה כלי כסף II, pp. 75–142), and her
